@@ -18,9 +18,10 @@ object ChatService {
     fun getLastMessages() = chats.values.map {
         try {
             it.messages.last()
-        } catch(e : NoSuchElementException) {
+        } catch (e: NoSuchElementException) {
+            Message(id = 0, userId = 0, "")
         }
-    }
+    }.filter { it.id != 0 }
 
     fun getMessages(userId: Int, count: Int? = null) =
         (count ?: chats[userId]?.messages?.size)?.let { lastIndex ->
