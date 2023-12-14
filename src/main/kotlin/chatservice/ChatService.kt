@@ -21,9 +21,13 @@ object ChatService {
 
     fun getMessages(userId: Int, count: Int? = null) =
         (count ?: chats[userId]?.messages?.size)?.let { recordsCount ->
-            chats[userId]?.messages?.take(recordsCount)?.onEach { message ->
-                message.isReaded = true
-            }
+            chats[userId]?.messages
+                ?.asSequence()
+                ?.take(recordsCount)
+                ?.onEach { message ->
+                    message.isReaded = true
+                }
+                ?.toList()
         } ?: throw NoMessagesException()
 
     fun deleteMessage(userId: Int, messageId: Int) =
