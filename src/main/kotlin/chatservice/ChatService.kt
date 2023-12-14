@@ -4,7 +4,7 @@ object ChatService {
     private var chats: MutableMap<Int, Chat> = mutableMapOf()
 
     fun clear() {
-        chats.clear();
+        chats.clear()
     }
 
     fun addMessage(userId: Int, text: String) =
