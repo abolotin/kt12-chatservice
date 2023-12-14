@@ -12,18 +12,10 @@ data class Chat(
     }
 
     fun deleteMessage(messageId: Int) {
-        try {
-            val message = messages.first { it.id == messageId }
-            messages.remove(message)
-        } catch (e: NoSuchElementException) {
-            throw NoMessageException(messageId)
-        }
+        messages.remove(
+            messages.firstOrNull { it.id == messageId } ?: throw NoMessageException(messageId)
+        )
     }
 
-    fun hasUnreadMessages(): Boolean = try {
-        messages.first { !it.isReaded }
-        true
-    } catch (e: NoSuchElementException) {
-        false
-    }
+    fun hasUnreadMessages(): Boolean = messages.any { !it.isReaded }
 }

@@ -16,16 +16,12 @@ object ChatService {
     fun getChats() = chats.values
 
     fun getLastMessages() = chats.values.map {
-        try {
-            it.messages.last()
-        } catch (e: NoSuchElementException) {
-            Message(id = 0, userId = 0, "")
-        }
-    }.filter { it.id != 0 }
+        it.messages.lastOrNull()
+    }.filterNotNull()
 
     fun getMessages(userId: Int, count: Int? = null) =
-        (count ?: chats[userId]?.messages?.size)?.let { lastIndex ->
-            chats[userId]?.messages?.subList(0, lastIndex)?.onEach { message ->
+        (count ?: chats[userId]?.messages?.size)?.let { recordsCount ->
+            chats[userId]?.messages?.take(recordsCount)?.onEach { message ->
                 message.isReaded = true
             }
         } ?: throw NoMessagesException()
